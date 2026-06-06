@@ -84,7 +84,7 @@ canvas {
 
 .dpad {
   display: grid;
-  grid-template-columns: repeat(3, 54px);
+  grid-template-columns: repeat(3, 54px) 96px;
   grid-template-rows: repeat(3, 46px);
   gap: 8px;
 }
@@ -99,21 +99,24 @@ canvas {
   grid-row: 2;
 }
 
+.dpad .main-action {
+  grid-column: 4;
+  grid-row: 1;
+}
+
 .dpad .right {
   grid-column: 3;
+  grid-row: 2;
+}
+
+.dpad .fire-action {
+  grid-column: 4;
   grid-row: 2;
 }
 
 .dpad .down {
   grid-column: 2;
   grid-row: 3;
-}
-
-.action-row {
-  display: grid;
-  grid-template-columns: 96px;
-  grid-template-rows: repeat(2, 46px);
-  gap: 8px;
 }
 
 .control {
@@ -159,12 +162,15 @@ canvas {
 @media (max-width: 620px) {
   body {
     align-items: start;
-    padding: 4px;
+    min-height: 100svh;
+    padding: 2px;
   }
 
   .game-shell {
     width: 100%;
-    gap: 6px;
+    min-height: 100svh;
+    grid-template-rows: auto minmax(280px, 1fr) auto;
+    gap: 4px;
   }
 
   .scorebar {
@@ -187,17 +193,20 @@ canvas {
 
   canvas {
     width: 100%;
+    height: min(58svh, 430px);
+    min-height: 280px;
+    aspect-ratio: auto;
     border-radius: 6px;
   }
 
   .controls {
-    flex-direction: column;
+    display: grid;
+    place-items: center;
     width: 100%;
-    gap: 10px;
   }
 
   .dpad {
-    grid-template-columns: repeat(3, 64px);
+    grid-template-columns: repeat(3, 72px);
     grid-template-rows: repeat(3, 52px);
     justify-content: center;
     gap: 8px;
@@ -210,23 +219,50 @@ canvas {
     font-size: 1.2rem;
   }
 
-  .action-row {
-    grid-template-columns: repeat(2, minmax(104px, 132px));
-    grid-template-rows: 48px;
-    justify-content: center;
-    width: 100%;
+  .dpad .up {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .dpad .left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .dpad .main-action {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .dpad .right {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .dpad .fire-action {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .dpad .down {
+    grid-column: 2;
+    grid-row: 3;
   }
 
   .main-action,
   .fire-action {
-    width: 100%;
-    min-width: 0;
+    width: 72px;
+    min-width: 72px;
+    height: 52px;
+    padding: 0 4px;
+    font-size: 0.86rem;
   }
 }
 
 @media (max-width: 620px) and (orientation: landscape) {
   .game-shell {
     grid-template-columns: minmax(0, 1fr) 224px;
+    grid-template-rows: auto minmax(0, 1fr);
     align-items: center;
   }
 
@@ -236,6 +272,8 @@ canvas {
 
   canvas {
     width: 100%;
+    height: calc(100svh - 56px);
+    min-height: 0;
   }
 
   .controls {

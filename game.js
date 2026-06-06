@@ -599,23 +599,30 @@ function drawOverlay() {
   ctx.fillStyle = "rgba(35, 31, 26, 0.44)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  const compact = window.innerWidth <= 620;
+  const panelWidth = compact ? 520 : 420;
+  const panelHeight = compact ? 224 : 188;
+  const titleSize = compact ? 30 : 34;
+  const bodySize = compact ? 18 : 18;
+
   ctx.fillStyle = "#fff8ed";
   ctx.strokeStyle = "#dbc8ae";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.roundRect(canvas.width / 2 - 210, canvas.height / 2 - 94, 420, 188, 8);
+  ctx.roundRect(canvas.width / 2 - panelWidth / 2, canvas.height / 2 - panelHeight / 2, panelWidth, panelHeight, 8);
   ctx.fill();
   ctx.stroke();
 
   ctx.fillStyle = "#231f1a";
   ctx.textAlign = "center";
-  ctx.font = "bold 34px system-ui, sans-serif";
-  ctx.fillText(game.over ? game.message : "カレーが歩くゲーム", canvas.width / 2, canvas.height / 2 - 28);
+  ctx.font = `bold ${titleSize}px system-ui, sans-serif`;
+  ctx.fillText(game.over ? game.message : "カレーが歩くゲーム", canvas.width / 2, canvas.height / 2 - 44);
 
   ctx.fillStyle = "#6c6258";
-  ctx.font = "18px system-ui, sans-serif";
-  ctx.fillText("矢印キー / WASD で歩く", canvas.width / 2, canvas.height / 2 + 14);
-  ctx.fillText("F / Fireでスパイス弾を撃ってオムライスを倒す", canvas.width / 2, canvas.height / 2 + 44);
+  ctx.font = `${bodySize}px system-ui, sans-serif`;
+  ctx.fillText("矢印キー / WASD で歩く", canvas.width / 2, canvas.height / 2 + 2);
+  ctx.fillText("Fireでスパイス弾を撃つ", canvas.width / 2, canvas.height / 2 + 34);
+  ctx.fillText("スプーンを避けてオムライスを倒す", canvas.width / 2, canvas.height / 2 + 66);
 }
 
 function addBurst(x, y, text, color) {
