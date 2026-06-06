@@ -12,6 +12,9 @@ const bestKey = "curry-walk-best";
 let best = Number(localStorage.getItem(bestKey) || 0);
 let lastTime = 0;
 let game;
+let audioContext = null;
+let nextStepSoundAt = 0;
+let lastStepDirection = "";
 
 bestEl.textContent = best;
 
@@ -47,6 +50,7 @@ resetGame();
 requestAnimationFrame(loop);
 
 startButton.addEventListener("click", () => {
+  ensureAudio();
   if (game.running) {
     return;
   }
@@ -57,6 +61,7 @@ startButton.addEventListener("click", () => {
 
   game.running = true;
   startButton.textContent = "Go";
+  playStartSound();
 });
 
 window.addEventListener("keydown", (event) => {
@@ -65,15 +70,18 @@ window.addEventListener("keydown", (event) => {
   }
 
   if (event.key === " ") {
+    ensureAudio();
     startButton.click();
     return;
   }
 
   if (event.key === "f" || event.key === "F") {
+    ensureAudio();
     fireSpiceBullet();
     return;
   }
 
+  ensureAudio();
   keys.add(normalizeKey(event.key));
 });
 
@@ -85,6 +93,7 @@ controlButtons.forEach((button) => {
   const key = button.dataset.key;
 
   button.addEventListener("pointerdown", () => {
+    ensureAudio();
     keys.add(key);
     button.classList.add("pressed");
   });
@@ -100,7 +109,10 @@ controlButtons.forEach((button) => {
   });
 });
 
-fireButton.addEventListener("click", fireSpiceBullet);
+fireButton.addEventListener("click", () => {
+  ensureAudio();
+  fireSpiceBullet();
+});
 
 function loop(timestamp) {
   const dt = Math.min((timestamp - lastTime) / 1000 || 0, 0.033);
@@ -136,6 +148,7 @@ function fireSpiceBullet() {
   if (!game.running || game.spice <= 0 || game.fireCooldown > 0) {
     if (game.running && game.spice <= 0) {
       addBurst(game.player.x + 54, game.player.y - 30, "no spice", "#b42318");
+      playNoSpiceSound();
     }
     return;
   }
@@ -150,20 +163,38 @@ function fireSpiceBullet() {
     spin: 0
   });
   addBurst(game.player.x + 60, game.player.y - 34, "-1 spice", "#b42318");
+  playFireSound();
   updateHud();
 }
 
 function movePlayer(dt) {
   const player = game.player;
   const speed = 260;
+  let direction = "";
 
-  if (keys.has("ArrowLeft")) player.x -= speed * dt;
-  if (keys.has("ArrowRight")) player.x += speed * dt;
-  if (keys.has("ArrowUp")) player.y -= speed * dt;
-  if (keys.has("ArrowDown")) player.y += speed * dt;
+  if (keys.has("ArrowLeft")) {
+    player.x -= speed * dt;
+    direction = "left";
+  }
+  if (keys.has("ArrowRight")) {
+    player.x += speed * dt;
+    direction = "right";
+  }
+  if (keys.has("ArrowUp")) {
+    player.y -= speed * dt;
+    direction = "up";
+  }
+  if (keys.has("ArrowDown")) {
+    player.y += speed * dt;
+    direction = "down";
+  }
 
   player.x = clamp(player.x, 70, canvas.width - 70);
   player.y = clamp(player.y, 190, canvas.height - 74);
+
+  if (direction) {
+    playStepSound(direction);
+  }
 }
 
 function spawnItems(dt) {
@@ -249,6 +280,7 @@ function checkCollisions() {
       game.spice += 1;
       game.score += 45;
       addBurst(spice.x, spice.y, "+spice", "#0f766e");
+      playSpiceSound();
       return false;
     }
     return true;
@@ -261,6 +293,7 @@ function checkCollisions() {
       const [omelet] = game.omelets.splice(hitIndex, 1);
       game.score += 120;
       addBurst(omelet.x, omelet.y - 24, "omurice down", "#b42318");
+      playHitSound();
       return false;
     }
 
@@ -295,6 +328,7 @@ function gameOver(message = "スプーンに当たった") {
   localStorage.setItem(bestKey, String(best));
   bestEl.textContent = best;
   startButton.textContent = "Retry";
+  playGameOverSound();
 }
 
 function updateHud() {
@@ -581,6 +615,96 @@ function drawOverlay() {
 
 function addBurst(x, y, text, color) {
   game.bursts.push({ x, y, text, color, life: 1 });
+}
+
+function ensureAudio() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+}
+
+function playTone({ frequency, duration, type = "sine", gain = 0.05, slideTo = null }) {
+  if (!audioContext) {
+    return;
+  }
+
+  const now = audioContext.currentTime;
+  const oscillator = audioContext.createOscillator();
+  const volume = audioContext.createGain();
+
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, now);
+  if (slideTo) {
+    oscillator.frequency.exponentialRampToValueAtTime(slideTo, now + duration);
+  }
+
+  volume.gain.setValueAtTime(0.0001, now);
+  volume.gain.exponentialRampToValueAtTime(gain, now + 0.01);
+  volume.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  oscillator.connect(volume);
+  volume.connect(audioContext.destination);
+  oscillator.start(now);
+  oscillator.stop(now + duration + 0.03);
+}
+
+function playStepSound(direction) {
+  if (!audioContext || !game.running) {
+    return;
+  }
+
+  const now = audioContext.currentTime;
+  if (now < nextStepSoundAt && direction === lastStepDirection) {
+    return;
+  }
+
+  const pitches = {
+    up: 560,
+    right: 470,
+    left: 410,
+    down: 310
+  };
+
+  lastStepDirection = direction;
+  nextStepSoundAt = now + 0.15;
+  playTone({
+    frequency: pitches[direction],
+    duration: 0.055,
+    type: "triangle",
+    gain: 0.035,
+    slideTo: pitches[direction] * 0.82
+  });
+}
+
+function playStartSound() {
+  playTone({ frequency: 392, duration: 0.08, type: "triangle", gain: 0.045, slideTo: 523 });
+  setTimeout(() => playTone({ frequency: 659, duration: 0.1, type: "triangle", gain: 0.04 }), 90);
+}
+
+function playSpiceSound() {
+  playTone({ frequency: 740, duration: 0.08, type: "sine", gain: 0.045, slideTo: 980 });
+}
+
+function playFireSound() {
+  playTone({ frequency: 260, duration: 0.07, type: "square", gain: 0.035, slideTo: 520 });
+}
+
+function playNoSpiceSound() {
+  playTone({ frequency: 180, duration: 0.12, type: "sawtooth", gain: 0.03, slideTo: 130 });
+}
+
+function playHitSound() {
+  playTone({ frequency: 520, duration: 0.06, type: "square", gain: 0.045, slideTo: 180 });
+  setTimeout(() => playTone({ frequency: 180, duration: 0.08, type: "triangle", gain: 0.04 }), 70);
+}
+
+function playGameOverSound() {
+  playTone({ frequency: 320, duration: 0.12, type: "sawtooth", gain: 0.04, slideTo: 190 });
+  setTimeout(() => playTone({ frequency: 150, duration: 0.22, type: "sawtooth", gain: 0.035, slideTo: 80 }), 120);
 }
 
 function normalizeKey(key) {

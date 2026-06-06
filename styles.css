@@ -76,13 +76,43 @@ canvas {
 }
 
 .controls {
-  display: grid;
+  display: flex;
+  align-items: center;
   justify-content: center;
   gap: 8px;
 }
 
-.controls div {
-  display: flex;
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 54px);
+  grid-template-rows: repeat(3, 46px);
+  gap: 8px;
+}
+
+.dpad .up {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.dpad .left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.dpad .right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.dpad .down {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: 96px;
+  grid-template-rows: repeat(2, 46px);
   gap: 8px;
 }
 
@@ -138,5 +168,9 @@ canvas {
 
   .scorebar strong {
     font-size: 1.35rem;
+  }
+
+  .controls {
+    flex-direction: column;
   }
 }
