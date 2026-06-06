@@ -134,13 +134,14 @@ canvas {
 .control {
   min-width: 54px;
   height: 46px;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
   color: var(--ink);
   font-weight: 800;
   box-shadow: 0 8px 18px rgba(57, 39, 18, 0.12);
-  touch-action: manipulation;
+  touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -220,7 +221,9 @@ canvas {
 
   .dpad {
     width: 100%;
-    grid-template-columns: 64px calc(100vw - 164px) 64px;
+    --side-button-width: 64px;
+    --center-button-width: calc(100vw - 164px);
+    grid-template-columns: var(--side-button-width) var(--center-button-width) var(--side-button-width);
     grid-template-rows: repeat(4, 52px);
     justify-content: stretch;
     gap: 8px;
@@ -235,14 +238,18 @@ canvas {
   .dpad .down,
   .dpad .main-action,
   .dpad .fire-action {
-    width: calc(100vw - 164px);
-    min-width: calc(100vw - 164px);
+    width: var(--center-button-width);
+    min-width: var(--center-button-width);
+    max-width: var(--center-button-width);
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .dpad .left,
   .dpad .right {
-    width: 64px;
-    min-width: 64px;
+    width: var(--side-button-width);
+    min-width: var(--side-button-width);
+    max-width: var(--side-button-width);
   }
 
   .dpad .up {
@@ -302,7 +309,9 @@ canvas {
 
   .dpad {
     width: 100%;
-    grid-template-columns: 58px calc(100vw - 148px) 58px;
+    --side-button-width: 58px;
+    --center-button-width: calc(100vw - 148px);
+    grid-template-columns: var(--side-button-width) var(--center-button-width) var(--side-button-width);
     grid-template-rows: repeat(4, 46px);
     gap: 6px;
   }
@@ -311,14 +320,16 @@ canvas {
   .dpad .down,
   .dpad .main-action,
   .dpad .fire-action {
-    width: calc(100vw - 148px);
-    min-width: calc(100vw - 148px);
+    width: var(--center-button-width);
+    min-width: var(--center-button-width);
+    max-width: var(--center-button-width);
   }
 
   .dpad .left,
   .dpad .right {
-    width: 58px;
-    min-width: 58px;
+    width: var(--side-button-width);
+    min-width: var(--side-button-width);
+    max-width: var(--side-button-width);
   }
 
   .dpad .left,

@@ -23,6 +23,14 @@ bestEl.textContent = best;
   window.addEventListener(eventName, unlockAudio, { once: false, passive: true });
 });
 
+[canvas, ...document.querySelectorAll(".control")].forEach((element) => {
+  ["contextmenu", "selectstart", "dragstart"].forEach((eventName) => {
+    element.addEventListener(eventName, (event) => {
+      event.preventDefault();
+    });
+  });
+});
+
 function resetGame() {
   game = {
     running: false,
