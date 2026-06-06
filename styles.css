@@ -207,7 +207,7 @@ canvas {
 
   .dpad {
     grid-template-columns: repeat(3, 72px);
-    grid-template-rows: repeat(3, 52px);
+    grid-template-rows: repeat(4, 52px);
     justify-content: center;
     gap: 8px;
   }
@@ -226,7 +226,7 @@ canvas {
 
   .dpad .left {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 2 / span 2;
   }
 
   .dpad .main-action {
@@ -236,17 +236,17 @@ canvas {
 
   .dpad .right {
     grid-column: 3;
-    grid-row: 2;
+    grid-row: 2 / span 2;
   }
 
   .dpad .fire-action {
-    grid-column: 1;
+    grid-column: 2;
     grid-row: 3;
   }
 
   .dpad .down {
     grid-column: 2;
-    grid-row: 3;
+    grid-row: 4;
   }
 
   .main-action,
@@ -256,6 +256,11 @@ canvas {
     height: 52px;
     padding: 0 4px;
     font-size: 0.86rem;
+  }
+
+  .dpad .left,
+  .dpad .right {
+    height: 112px;
   }
 }
 
@@ -282,7 +287,7 @@ canvas {
 
   .dpad {
     grid-template-columns: repeat(3, 58px);
-    grid-template-rows: repeat(3, 46px);
+    grid-template-rows: repeat(4, 46px);
     gap: 6px;
   }
 
@@ -290,5 +295,10 @@ canvas {
     width: 58px;
     min-width: 58px;
     height: 46px;
+  }
+
+  .dpad .left,
+  .dpad .right {
+    height: 98px;
   }
 }

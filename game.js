@@ -19,7 +19,7 @@ let lastStepDirection = "";
 
 bestEl.textContent = best;
 
-["touchstart", "pointerdown", "mousedown", "keydown"].forEach((eventName) => {
+["touchstart", "touchend", "pointerdown", "mousedown", "click", "keydown"].forEach((eventName) => {
   window.addEventListener(eventName, unlockAudio, { once: false, passive: true });
 });
 
@@ -631,7 +631,11 @@ function addBurst(x, y, text, color) {
 
 function ensureAudio() {
   if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const AudioEngine = window.AudioContext || window.webkitAudioContext;
+    if (!AudioEngine) {
+      return null;
+    }
+    audioContext = new AudioEngine();
   }
 
   if (audioContext.state === "suspended") {
@@ -664,8 +668,12 @@ function unlockAudio() {
 function playTone({ frequency, duration, type = "sine", gain = 0.05, slideTo = null }) {
   const context = ensureAudio();
 
-  if (!context || context.state === "suspended") {
+  if (!context) {
     return;
+  }
+
+  if (context.state === "suspended") {
+    context.resume().catch(() => {});
   }
 
   const now = context.currentTime;
