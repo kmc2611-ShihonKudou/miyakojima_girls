@@ -67,6 +67,7 @@ button {
 
 canvas {
   width: 100%;
+  height: auto;
   aspect-ratio: 16 / 9;
   display: block;
   background: #e7c68a;
@@ -189,6 +190,9 @@ canvas {
 
   canvas {
     width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: none;
     border-radius: 6px;
   }
 
@@ -258,6 +262,13 @@ canvas {
 }
 
 @media (max-width: 620px) and (orientation: landscape) {
+  canvas {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: none;
+  }
+
   .controls {
     align-self: center;
   }
