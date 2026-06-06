@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>カレーが歩くゲーム</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game-shell">
+      <section class="scorebar" aria-label="スコア">
+        <div>
+          <span>Score</span>
+          <strong id="score">0</strong>
+        </div>
+        <div>
+          <span>Spice</span>
+          <strong id="spice">0</strong>
+        </div>
+        <div>
+          <span>Best</span>
+          <strong id="best">0</strong>
+        </div>
+      </section>
+
+      <canvas id="game" width="960" height="540" aria-label="カレーが歩くゲーム画面"></canvas>
+
+      <section class="controls" aria-label="操作">
+        <button class="control" data-key="ArrowUp" type="button">↑</button>
+        <div>
+          <button class="control" data-key="ArrowLeft" type="button">←</button>
+          <button class="control main-action" id="startButton" type="button">Start</button>
+          <button class="control" data-key="ArrowRight" type="button">→</button>
+        </div>
+        <div>
+          <button class="control" data-key="ArrowDown" type="button">↓</button>
+          <button class="control fire-action" id="fireButton" type="button">Fire</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
