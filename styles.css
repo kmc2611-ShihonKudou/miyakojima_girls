@@ -220,7 +220,7 @@ canvas {
 
   .dpad {
     width: 100%;
-    grid-template-columns: 64px minmax(0, 1fr) 64px;
+    grid-template-columns: 64px calc(100vw - 164px) 64px;
     grid-template-rows: repeat(4, 52px);
     justify-content: stretch;
     gap: 8px;
@@ -235,8 +235,8 @@ canvas {
   .dpad .down,
   .dpad .main-action,
   .dpad .fire-action {
-    width: 100%;
-    min-width: 0;
+    width: calc(100vw - 164px);
+    min-width: calc(100vw - 164px);
   }
 
   .dpad .left,
@@ -302,7 +302,7 @@ canvas {
 
   .dpad {
     width: 100%;
-    grid-template-columns: 58px minmax(0, 1fr) 58px;
+    grid-template-columns: 58px calc(100vw - 148px) 58px;
     grid-template-rows: repeat(4, 46px);
     gap: 6px;
   }
@@ -311,8 +311,8 @@ canvas {
   .dpad .down,
   .dpad .main-action,
   .dpad .fire-action {
-    width: 100%;
-    min-width: 0;
+    width: calc(100vw - 148px);
+    min-width: calc(100vw - 148px);
   }
 
   .dpad .left,
