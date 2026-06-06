@@ -13,10 +13,15 @@ let best = Number(localStorage.getItem(bestKey) || 0);
 let lastTime = 0;
 let game;
 let audioContext = null;
+let audioUnlocked = false;
 let nextStepSoundAt = 0;
 let lastStepDirection = "";
 
 bestEl.textContent = best;
+
+["touchstart", "pointerdown", "mousedown", "keydown"].forEach((eventName) => {
+  window.addEventListener(eventName, unlockAudio, { once: false, passive: true });
+});
 
 function resetGame() {
   game = {
@@ -623,18 +628,42 @@ function ensureAudio() {
   }
 
   if (audioContext.state === "suspended") {
-    audioContext.resume();
+    audioContext.resume().catch(() => {});
   }
+
+  return audioContext;
 }
 
-function playTone({ frequency, duration, type = "sine", gain = 0.05, slideTo = null }) {
-  if (!audioContext) {
+function unlockAudio() {
+  const context = ensureAudio();
+
+  if (audioUnlocked || !context) {
     return;
   }
 
-  const now = audioContext.currentTime;
-  const oscillator = audioContext.createOscillator();
-  const volume = audioContext.createGain();
+  const now = context.currentTime;
+  const oscillator = context.createOscillator();
+  const volume = context.createGain();
+
+  volume.gain.setValueAtTime(0.0001, now);
+  oscillator.frequency.setValueAtTime(220, now);
+  oscillator.connect(volume);
+  volume.connect(context.destination);
+  oscillator.start(now);
+  oscillator.stop(now + 0.01);
+  audioUnlocked = true;
+}
+
+function playTone({ frequency, duration, type = "sine", gain = 0.05, slideTo = null }) {
+  const context = ensureAudio();
+
+  if (!context || context.state === "suspended") {
+    return;
+  }
+
+  const now = context.currentTime;
+  const oscillator = context.createOscillator();
+  const volume = context.createGain();
 
   oscillator.type = type;
   oscillator.frequency.setValueAtTime(frequency, now);
@@ -647,7 +676,7 @@ function playTone({ frequency, duration, type = "sine", gain = 0.05, slideTo = n
   volume.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
   oscillator.connect(volume);
-  volume.connect(audioContext.destination);
+  volume.connect(context.destination);
   oscillator.start(now);
   oscillator.stop(now + duration + 0.03);
 }

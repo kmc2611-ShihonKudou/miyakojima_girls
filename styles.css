@@ -158,19 +158,99 @@ canvas {
 
 @media (max-width: 620px) {
   body {
-    padding: 10px;
+    align-items: start;
+    padding: 4px;
+  }
+
+  .game-shell {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .scorebar {
+    gap: 4px;
   }
 
   .scorebar div {
-    min-height: 58px;
-    padding: 10px;
+    min-height: 46px;
+    padding: 7px 8px;
+    border-radius: 6px;
+  }
+
+  .scorebar span {
+    font-size: 0.68rem;
   }
 
   .scorebar strong {
-    font-size: 1.35rem;
+    font-size: 1.15rem;
+  }
+
+  canvas {
+    width: 100%;
+    border-radius: 6px;
   }
 
   .controls {
     flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .dpad {
+    grid-template-columns: repeat(3, 64px);
+    grid-template-rows: repeat(3, 52px);
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .dpad .control {
+    width: 64px;
+    min-width: 64px;
+    height: 52px;
+    font-size: 1.2rem;
+  }
+
+  .action-row {
+    grid-template-columns: repeat(2, minmax(104px, 132px));
+    grid-template-rows: 48px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .main-action,
+  .fire-action {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 620px) and (orientation: landscape) {
+  .game-shell {
+    grid-template-columns: minmax(0, 1fr) 224px;
+    align-items: center;
+  }
+
+  .scorebar {
+    grid-column: 1 / -1;
+  }
+
+  canvas {
+    width: 100%;
+  }
+
+  .controls {
+    align-self: center;
+  }
+
+  .dpad {
+    grid-template-columns: repeat(3, 58px);
+    grid-template-rows: repeat(3, 46px);
+    gap: 6px;
+  }
+
+  .dpad .control {
+    width: 58px;
+    min-width: 58px;
+    height: 46px;
   }
 }
