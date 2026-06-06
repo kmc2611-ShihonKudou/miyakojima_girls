@@ -23,11 +23,18 @@ body {
   background:
     linear-gradient(180deg, #f7efe0 0%, #f1dfbf 58%, #e7cfa9 100%);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 button {
   font: inherit;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .game-shell {
@@ -74,6 +81,10 @@ canvas {
   border: 1px solid #c69d62;
   border-radius: 8px;
   box-shadow: var(--shadow);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .controls {
@@ -129,6 +140,11 @@ canvas {
   color: var(--ink);
   font-weight: 800;
   box-shadow: 0 8px 18px rgba(57, 39, 18, 0.12);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .control:active,
