@@ -166,7 +166,7 @@ canvas {
   }
 
   .game-shell {
-    width: 100%;
+    width: calc(100vw - 20px);
     gap: 6px;
   }
 
@@ -189,9 +189,9 @@ canvas {
   }
 
   canvas {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
+    width: calc(100vw - 20px);
+    height: calc((100vw - 20px) * 9 / 16);
+    aspect-ratio: auto;
     max-height: none;
     border-radius: 6px;
   }
@@ -263,9 +263,9 @@ canvas {
 
 @media (max-width: 620px) and (orientation: landscape) {
   canvas {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
+    width: calc(100vw - 20px);
+    height: calc((100vw - 20px) * 9 / 16);
+    aspect-ratio: auto;
     max-height: none;
   }
 
