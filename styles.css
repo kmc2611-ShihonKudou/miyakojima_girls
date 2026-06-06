@@ -161,16 +161,12 @@ canvas {
 
 @media (max-width: 620px) {
   body {
-    align-items: start;
-    min-height: 100svh;
-    padding: 2px;
+    padding: 10px;
   }
 
   .game-shell {
     width: 100%;
-    min-height: 100svh;
-    grid-template-rows: auto minmax(280px, 1fr) auto;
-    gap: 4px;
+    gap: 6px;
   }
 
   .scorebar {
@@ -193,9 +189,6 @@ canvas {
 
   canvas {
     width: 100%;
-    height: min(58svh, 430px);
-    min-height: 280px;
-    aspect-ratio: auto;
     border-radius: 6px;
   }
 
@@ -265,22 +258,6 @@ canvas {
 }
 
 @media (max-width: 620px) and (orientation: landscape) {
-  .game-shell {
-    grid-template-columns: minmax(0, 1fr) 224px;
-    grid-template-rows: auto minmax(0, 1fr);
-    align-items: center;
-  }
-
-  .scorebar {
-    grid-column: 1 / -1;
-  }
-
-  canvas {
-    width: 100%;
-    height: calc(100svh - 56px);
-    min-height: 0;
-  }
-
   .controls {
     align-self: center;
   }
