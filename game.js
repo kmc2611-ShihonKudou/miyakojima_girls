@@ -9,7 +9,7 @@ const controlButtons = document.querySelectorAll(".control[data-key]");
 
 const keys = new Set();
 const bestKey = "curry-walk-best";
-const OMELET_SCORE = 150;
+const OMELET_MAX_SCORE = 200;
 let best = Number(localStorage.getItem(bestKey) || 0);
 let lastTime = 0;
 let game;
@@ -305,8 +305,9 @@ function checkCollisions() {
 
     if (hitIndex >= 0) {
       const [omelet] = game.omelets.splice(hitIndex, 1);
-      game.score += OMELET_SCORE;
-      addBurst(omelet.x, omelet.y - 24, `+${OMELET_SCORE}`, "#b42318");
+      const score = calculateOmeletScore(omelet);
+      game.score += score;
+      addBurst(omelet.x, omelet.y - 24, `+${score}`, "#b42318");
       playHitSound();
       updateHud();
       return false;
@@ -637,6 +638,11 @@ function drawOverlay() {
 
 function addBurst(x, y, text, color) {
   game.bursts.push({ x, y, text, color, life: 1 });
+}
+
+function calculateOmeletScore(omelet) {
+  const shotDistance = distance(game.player, omelet);
+  return Math.round(clamp((1 - shotDistance / 560) * OMELET_MAX_SCORE, 10, OMELET_MAX_SCORE));
 }
 
 function ensureAudio() {
