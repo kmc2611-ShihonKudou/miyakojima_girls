@@ -3,33 +3,37 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>記憶の欠片</title>
+    <title>カレーが歩くゲーム</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <main class="game-shell">
-      <header class="statusbar" aria-label="ステータス">
+      <section class="scorebar" aria-label="スコア">
         <div>
-          <span>Progress</span>
-          <strong id="memoryCount">0 / 8</strong>
+          <span>Score</span>
+          <strong id="score">0</strong>
         </div>
         <div>
-          <span>Room</span>
-          <strong id="nearText">---</strong>
+          <span>Spice</span>
+          <strong id="spice">0</strong>
         </div>
-        <button id="startButton" type="button">始める</button>
-      </header>
+        <div>
+          <span>Best</span>
+          <strong id="best">0</strong>
+        </div>
+      </section>
 
-      <canvas id="game" width="960" height="540" aria-label="記憶の欠片ゲーム画面"></canvas>
+      <canvas id="game" width="960" height="540" aria-label="カレーが歩くゲーム画面"></canvas>
 
       <section class="controls" aria-label="操作">
-        <button class="control" data-key="ArrowUp" type="button">↑</button>
-        <div>
-          <button class="control" data-key="ArrowLeft" type="button">←</button>
-          <button class="control action" id="inspectButton" type="button">調べる</button>
-          <button class="control" data-key="ArrowRight" type="button">→</button>
+        <div class="dpad">
+          <button class="control up" data-key="ArrowUp" type="button">↑</button>
+          <button class="control left" data-key="ArrowLeft" type="button">←</button>
+          <button class="control main-action" id="startButton" type="button">Start</button>
+          <button class="control right" data-key="ArrowRight" type="button">→</button>
+          <button class="control fire-action" id="fireButton" type="button">Fire</button>
+          <button class="control down" data-key="ArrowDown" type="button">↓</button>
         </div>
-        <button class="control" data-key="ArrowDown" type="button">↓</button>
       </section>
     </main>
 
