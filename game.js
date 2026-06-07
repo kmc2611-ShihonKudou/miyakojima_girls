@@ -9,6 +9,7 @@ const controlButtons = document.querySelectorAll(".control[data-key]");
 
 const keys = new Set();
 const bestKey = "curry-walk-best";
+const OMELET_SCORE = 150;
 let best = Number(localStorage.getItem(bestKey) || 0);
 let lastTime = 0;
 let game;
@@ -304,9 +305,10 @@ function checkCollisions() {
 
     if (hitIndex >= 0) {
       const [omelet] = game.omelets.splice(hitIndex, 1);
-      game.score += 120;
-      addBurst(omelet.x, omelet.y - 24, "omurice down", "#b42318");
+      game.score += OMELET_SCORE;
+      addBurst(omelet.x, omelet.y - 24, `+${OMELET_SCORE}`, "#b42318");
       playHitSound();
+      updateHud();
       return false;
     }
 
@@ -629,8 +631,8 @@ function drawOverlay() {
   ctx.fillStyle = "#6c6258";
   ctx.font = `${bodySize}px system-ui, sans-serif`;
   ctx.fillText("矢印キー / WASD で歩く", canvas.width / 2, canvas.height / 2 + 2);
-  ctx.fillText("Fireでスパイス弾を撃つ", canvas.width / 2, canvas.height / 2 + 34);
-  ctx.fillText("スプーンを避けてオムライスを倒す", canvas.width / 2, canvas.height / 2 + 66);
+  ctx.fillText("スプーンとオムライスを避ける", canvas.width / 2, canvas.height / 2 + 34);
+  ctx.fillText("スパイスを集め、弾を撃ってオムライスを倒す", canvas.width / 2, canvas.height / 2 + 66);
 }
 
 function addBurst(x, y, text, color) {
